@@ -4,22 +4,12 @@ import {useWinningPatterns} from '../utils/useWinningPatterns'
 const Tictac = () => {
     const size = 3
     const initialboard = Array(size*size).fill(null)
-    const winPattern = useWinningPatterns(size)
     console.log(winPattern)
     const [board, setBoard] = useState(initialboard)
     const [turnX, setTurnX] = useState(true) // first turn will be of X always
 
     // winning patterns for 3*3 board game.
-    const winningPatterns = [
-        [0, 1, 2], 
-        [3, 4, 5], 
-        [6, 7, 8], 
-        [0, 4, 8], //asdas
-        [2, 4, 6],
-        [0, 3, 6], 
-        [1, 4, 7], 
-        [2, 5, 8]
-    ]
+    const winningPatterns = useWinningPatterns(size)
 
     // resets the game board back to initial state.
     const resetGame = () => {
