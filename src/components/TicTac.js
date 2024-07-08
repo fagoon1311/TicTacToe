@@ -4,7 +4,7 @@ import {useWinningPatterns} from '../utils/useWinningPatterns'
 const Tictac = () => {
     const size = 3
     const initialboard = Array(size*size).fill(null)
-    console.log(winPattern)
+  
     const [board, setBoard] = useState(initialboard)
     const [turnX, setTurnX] = useState(true) // first turn will be of X always
 
