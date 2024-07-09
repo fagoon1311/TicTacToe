@@ -1,11 +1,28 @@
 import React, { useState } from 'react'
 import {useWinningPatterns} from '../utils/useWinningPatterns'
+ 
+// dropdown menu for grid options.
+const Dropdown = () => {
+  const gridSizes = ['3', '4', '5', '6']
+  const [showgrid, setShowGrid] = useState(false)
+  return (
+    <div className='flex flex-col w-20'>
+      <button className='bg-cyan-600 text-white rounded-md border-white-2 mb-2' onClick={()=>setShowGrid(!showgrid)}>Grid Size</button>
+      {showgrid &&
+        <div className='bg-cyan-600 rounded-md text-white'>
+          {
+            gridSizes.map((ele)=><div className='px-2 flex items-center justify-center'>{ele}X{ele}</div>)
+          }
+        </div>
+      }
+    </div>
+  )
+}
 
 const Tictac = () => {
     // grid size default 3
     const [size, setSize] = useState(4)
     const initialboard = Array(size*size).fill(null)
-
     const [board, setBoard] = useState(initialboard)
     const [turnX, setTurnX] = useState(true) // first turn will be of X always
 
@@ -69,7 +86,7 @@ const Tictac = () => {
   return (
     <div className='flex flex-col items-center'>
         
-        <span className='text-white text-xl mb-10 bg-cyan-900 rounded-md p-2'>{statusMessage()}</span>
+        <div><span className='text-white text-xl mb-10 bg-cyan-900 rounded-md p-2'>{statusMessage()}</span><span></span></div>
         
         <div className={gridClasses[size]}>
             {
