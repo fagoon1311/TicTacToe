@@ -1,23 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useWinningPatterns} from '../utils/useWinningPatterns'
  
 // dropdown menu for grid options.
-const Dropdown = () => {
-  const gridSizes = ['3', '4', '5', '6']
-  const [showgrid, setShowGrid] = useState(false)
-  return (
-    <div className='flex flex-col w-20'>
-      <button className='bg-cyan-600 text-white rounded-md border-white-2 mb-2' onClick={()=>setShowGrid(!showgrid)}>Grid Size</button>
-      {showgrid &&
-        <div className='bg-cyan-600 rounded-md text-white'>
-          {
-            gridSizes.map((ele)=><div className='px-2 flex items-center justify-center'>{ele}X{ele}</div>)
-          }
-        </div>
-      }
-    </div>
-  )
-}
+const Dropdown = ({setSize}) => {
+  
+    const gridSizes = [3, 4, 5, 6]
+    const [showgrid, setShowGrid] = useState(false)
+    const handleClick = (ele) =>{
+      setSize(ele)
+    }
+    return (
+      <div className='flex flex-col w-20 relative'>
+        <button className='bg-cyan-900 text-white rounded-md border-white-2 p-2 ' onClick={()=>setShowGrid(!showgrid)}>Grid</button>
+        {showgrid &&
+          <div className='bg-cyan-600 rounded-md text-white absolute w-24 top-[45px]'>
+            {
+              gridSizes.map((ele)=><div 
+              className='px-2 flex items-center justify-center hover:bg-cyan-900 cursor-pointer rounded-md'
+              onClick={()=>{
+                handleClick(ele)
+                setShowGrid(false)
+              }
+              }
+              >{ele}X{ele}</div>)
+            }
+          </div>
+        }
+      </div>
+    )
+  }
 
 const Tictac = () => {
     // grid size default 3
@@ -25,27 +36,20 @@ const Tictac = () => {
     const initialboard = Array(size*size).fill(null)
     const [board, setBoard] = useState(initialboard)
     const [turnX, setTurnX] = useState(true) // first turn will be of X always
-
     // winning patterns for 3*3 board game.
     const winningPatterns = useWinningPatterns(size)
-    //console.log(winningPatterns)
+    console.log(board)
+
+    useEffect(()=>{
+      setBoard(initialboard)
+    }, [size])
+
 
     // resets the game board back to initial state.
     const resetGame = () => {
         setBoard(initialboard)
         setTurnX(true)
     }
-
-    // to check if someone has actually won the game.
-    // const checkWinner = (board) => {
-    //     for(let i = 0; i < winningPatterns.length; i++){
-    //         const [a, b, c] = winningPatterns[i]
-    //         if(board[a] && board[a]===board[b] && board[a]===board[c]){
-    //             return board[a]
-    //         }
-    //     }
-    //     return null
-    // }
 
     const checkWinner = (board) => {
         for(let i = 0; i < winningPatterns.length; i++){
@@ -81,14 +85,20 @@ const Tictac = () => {
         6: 'grid grid-flow-row grid-cols-6 grid-rows-6 gap-4 mb-10',
       };
 
-
-
   return (
     <div className='flex flex-col items-center'>
         
-        <div><span className='text-white text-xl mb-10 bg-cyan-900 rounded-md p-2'>{statusMessage()}</span><span></span></div>
+        <div className='flex flex-row justify-between items-center w-full'>
+            <span className='text-white text-xl mb-10 rounded-md p-2'>
+                <Dropdown setSize={setSize}/>
+            </span>
+            <span className='text-white text-xl mb-10 bg-cyan-900 rounded-md p-2'>
+                {statusMessage()}
+            </span>
+        </div>
         
         <div className={gridClasses[size]}>
+            
             {
                 board.map((val,index)=><button 
                 className='bg-sky-700 bg-opacity-20 rounded-md h-24 w-24 text-2xl text-white  hover:border border-cyan-400'
